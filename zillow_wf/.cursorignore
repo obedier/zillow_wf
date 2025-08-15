@@ -1,0 +1,24 @@
+# Virtualenv and caches
+venv/**
+__pycache__/**
+
+# Debug data and large HTML blobs
+
+zillow_wf/data/html/**
+
+# Legacy/duplicate scripts
+to_be_deleted/**
+zillow_wf/to_be_deleted/**
+
+# Notebooks outputs
+zillow_wf/notebooks/**
+
+# Credentials
+credentials/**
+
+# Compiled artifacts
+*.pyc
+*.pyo
+
+# Large results dumps
+zillow_wf/data/learn/results/**
