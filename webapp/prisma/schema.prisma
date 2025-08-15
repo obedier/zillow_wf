@@ -65,7 +65,7 @@ model ListingsSummary {
 
 model ListingsDetail {
   id                      Int      @id @default(autoincrement())
-  zpid                    String
+  zpid                    String   @unique // Make this unique for one-to-one relationship
   descriptionRaw          String?  @map("description_raw")
   lotSizeAcres            String?  @map("lot_size_acres")
   propertySubtype         String?  @map("property_subtype")
@@ -113,7 +113,7 @@ model ListingsDetail {
 
 model ListingsDerived {
   id                      Int      @id @default(autoincrement())
-  zpid                    String
+  zpid                    String   @unique // Make this unique for one-to-one relationship
   waterfrontLengthFt      Int?     @map("waterfront_length_ft")
   hasBoatDock            Boolean? @map("has_boat_dock")
   hasBoatLift            Boolean? @map("has_boat_lift")
@@ -173,7 +173,7 @@ model ListingTextContent {
 
 model WfData {
   id              Int      @id @default(autoincrement())
-  zpid            String
+  zpid            String   @unique // Make this unique for one-to-one relationship
   waterfrontLength Decimal? @map("waterfront_length")
   waterType       String?  @map("water_type")
   accessType      String?  @map("access_type")
