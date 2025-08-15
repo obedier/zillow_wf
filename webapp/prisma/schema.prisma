@@ -1,0 +1,232 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ListingsSummary {
+  zpid                    String   @id
+  url                     String
+  address                 String
+  city                    String
+  county                  String?
+  state                   String
+  zipCode                 String?  @map("zip_code")
+  price                   Int?
+  dPriceFormatted         String?  @map("d_price_formatted")
+  beds                    Int?
+  baths                   Int?
+  homeSizeSqft            Int?     @map("home_size_sqft")
+  yearBuilt               Int?     @map("year_built")
+  isCondo                 Boolean? @map("is_condo")
+  isWaterfront            Boolean? @map("is_waterfront")
+  createdAt               DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime? @map("updated_at") @db.Timestamptz(6)
+  pricePerSqft            Int?     @map("price_per_sqft")
+  hoaFee                  String?  @map("hoa_fee")
+  latitude                Decimal?
+  longitude               Decimal?
+  zestimate               Int?
+  rentZestimate          Int?     @map("rent_zestimate")
+  monthlyHoaFee          Int?     @map("monthly_hoa_fee")
+  lotAreaValue            Decimal? @map("lot_area_value")
+  lotAreaUnit             String?  @map("lot_area_unit")
+  daysOnZillow           Int?     @map("days_on_zillow")
+  pageViewCount           Int?     @map("page_view_count")
+  favoriteCount           Int?     @map("favorite_count")
+  homeStatus              String?  @map("home_status")
+  contingentType          String?  @map("contingent_type")
+  mlsId                   String?  @map("mls_id")
+  mlsName                 String?  @map("mls_name")
+  lotAreaUnits            String?  @map("lot_area_units")
+  homeType                String?  @map("home_type")
+  propertyTypeDimension   String?  @map("property_type_dimension")
+  listingProvider         String?  @map("listing_provider")
+  waterfrontFootage       String?  @map("waterfront_footage")
+  dockInfo                String?  @map("dock_info")
+
+  // Relations
+  details                 ListingsDetail?
+  derived                 ListingsDerived?
+  photos                  PropertyPhoto[]
+  textContent             ListingTextContent[]
+  wfData                  WfData?
+  favorites               PropertyFavorite[]
+  comments                PropertyComment[]
+
+  @@map("listings_summary")
+}
+
+model ListingsDetail {
+  id                      Int      @id @default(autoincrement())
+  zpid                    String
+  descriptionRaw          String?  @map("description_raw")
+  lotSizeAcres            String?  @map("lot_size_acres")
+  propertySubtype         String?  @map("property_subtype")
+  boatAccess              Boolean? @map("boat_access")
+  dMlsNumber              String?  @map("d_mls_number")
+  listingAgent            String?  @map("listing_agent")
+  listingOffice           String?  @map("listing_office")
+  htmlContent             String?  @map("html_content")
+  createdAt               DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime? @map("updated_at") @db.Timestamptz(6)
+  priceHistory            String?  @map("price_history")
+  taxHistory              String?  @map("tax_history")
+  listingAgentPhone       String?  @map("listing_agent_phone")
+  resoFacts               String?  @map("reso_facts")
+  schools                 String?
+  parkingInfo             String?  @map("parking_info")
+  onMarketDate            DateTime? @map("on_market_date") @db.Timestamptz(6)
+  ownershipType           String?  @map("ownership_type")
+  parcelNumber            String?  @map("parcel_number")
+  livingAreaUnits         String?  @map("living_area_units")
+  pricePerSqft            String?  @map("price_per_sqft")
+  dDescriptionPreview     String?  @map("d_description_preview")
+  dResoFactsPreview       String?  @map("d_reso_facts_preview")
+  dPriceHistoryPreview    String?  @map("d_price_history_preview")
+  dTaxHistoryPreview      String?  @map("d_tax_history_preview")
+  dSchoolsPreview         String?  @map("d_schools_preview")
+  dParkingInfoPreview     String?  @map("d_parking_info_preview")
+  waterfrontFeatures      String?  @map("waterfront_features")
+  waterView               String?  @map("water_view")
+  rooms                   String?
+  view                    String?
+  dockInfo                String?  @map("dock_info")
+  bridgeHeight            String?  @map("bridge_height")
+  waterDepth              String?  @map("water_depth")
+  livingArea              String?  @map("living_area")
+  livingAreaValue         String?  @map("living_area_value")
+  canalInfo               String?  @map("canal_info")
+  oceanAccess             String?  @map("ocean_access")
+
+  // Relations
+  summary                 ListingsSummary @relation(fields: [zpid], references: [zpid])
+
+  @@map("listings_detail")
+}
+
+model ListingsDerived {
+  id                      Int      @id @default(autoincrement())
+  zpid                    String
+  waterfrontLengthFt      Int?     @map("waterfront_length_ft")
+  hasBoatDock            Boolean? @map("has_boat_dock")
+  hasBoatLift            Boolean? @map("has_boat_lift")
+  hasBoatRamp            Boolean? @map("has_boat_ramp")
+  hasMarinaAccess        Boolean? @map("has_marina_access")
+  bridgeHeightFt          Int?     @map("bridge_height_ft")
+  waterDepthFt            Int?     @map("water_depth_ft")
+  canalWidthFt            Int?     @map("canal_width_ft")
+  waterTypePrimary        String?  @map("water_type_primary")
+  waterTypeSecondary      String?  @map("water_type_secondary")
+  pricePerWaterfrontFoot  Decimal? @map("price_per_waterfront_foot")
+  pricePerBuildingSqft    Decimal? @map("price_per_building_sqft")
+  pricePerLotSqft         Decimal? @map("price_per_lot_sqft")
+  analysisConfidence      Decimal? @map("analysis_confidence")
+  analysisMethod          String?  @map("analysis_method")
+  analysisNotes           String?  @map("analysis_notes")
+  createdAt               DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime? @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  summary                 ListingsSummary @relation(fields: [zpid], references: [zpid])
+
+  @@map("listings_derived")
+}
+
+model PropertyPhoto {
+  id              Int      @id @default(autoincrement())
+  zpid            String
+  caption         String?
+  mainUrl         String?  @map("main_url")
+  jpegResolutions String?  @map("jpeg_resolutions")
+  webpResolutions String?  @map("webp_resolutions")
+  photoOrder      Int?     @map("photo_order")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime? @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  summary         ListingsSummary @relation(fields: [zpid], references: [zpid])
+
+  @@map("property_photos")
+}
+
+model ListingTextContent {
+  id              Int      @id @default(autoincrement())
+  zpid            String
+  contentType     String?  @map("content_type")
+  contentText     String?  @map("content_text")
+  extractionMethod String? @map("extraction_method")
+  confidenceScore Decimal? @map("confidence_score")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Relations
+  summary         ListingsSummary @relation(fields: [zpid], references: [zpid])
+
+  @@map("listing_text_content")
+}
+
+model WfData {
+  id              Int      @id @default(autoincrement())
+  zpid            String
+  waterfrontLength Decimal? @map("waterfront_length")
+  waterType       String?  @map("water_type")
+  accessType      String?  @map("access_type")
+  analysisDate    DateTime? @map("analysis_date") @db.Timestamptz(6)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime? @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  summary         ListingsSummary @relation(fields: [zpid], references: [zpid])
+
+  @@map("wf_data")
+}
+
+// New models for the web app functionality
+model PropertyFavorite {
+  id        Int      @id @default(autoincrement())
+  zpid      String
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Relations
+  summary   ListingsSummary @relation(fields: [zpid], references: [zpid])
+
+  @@unique([zpid, userId])
+  @@map("property_favorites")
+}
+
+model PropertyComment {
+  id        Int      @id @default(autoincrement())
+  zpid      String
+  userId    String   @map("user_id")
+  comment   String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime? @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  summary   ListingsSummary @relation(fields: [zpid], references: [zpid])
+
+  @@map("property_comments")
+}
+
+model ExtractionJob {
+  id          Int      @id @default(autoincrement())
+  urls        String[] // Array of URLs to process
+  status      String   @default("pending") // pending, running, completed, failed
+  progress    Int      @default(0) // 0-100
+  totalUrls   Int
+  processedUrls Int    @default(0) @map("processed_urls")
+  errorCount  Int      @default(0) @map("error_count")
+  startedAt   DateTime? @map("started_at") @db.Timestamptz(6)
+  completedAt DateTime? @map("completed_at") @db.Timestamptz(6)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime? @map("updated_at") @db.Timestamptz(6)
+
+  @@map("extraction_jobs")
+}
